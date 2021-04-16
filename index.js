@@ -12,7 +12,7 @@ app.use(bodyParser.json());
 
 
 
-const port = 4000|| process.env.PORT
+const port = 4000 || process.env.PORT
 
 app.get('/', (req, res) => {
   res.send('Hello World!')
@@ -30,6 +30,8 @@ const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology:
 client.connect(err => {
   const bookCollection = client.db("travelXP").collection("book");
   const reviewCollection = client.db("travelXP").collection("review");
+  const eventCollection = client.db("travelXP").collection("event");
+
   console.log('db connection successful');
 
 
@@ -39,28 +41,28 @@ client.connect(err => {
     const book = req.body;
     console.log(book);
     bookCollection.insertOne(book)
-    .then(console.log(`successfully Inserted An Item`))
+      .then(console.log(`successfully Inserted An Item`))
   })
 
 
 
   //get user book databaseName
-  app.get('/getBookingList/:email',(req, res)=>{
+  app.get('/getBookingList/:email', (req, res) => {
     const email = req.params.email
-    bookCollection.find({email: email})
-    .toArray((err, collections)=>{
-      res.send(collections)
-    })
+    bookCollection.find({ email: email })
+      .toArray((err, collections) => {
+        res.send(collections)
+      })
   })
 
 
 
 
- //to post review
+  //to post review
   app.post('/addReview', (req, res) => {
     const review = req.body
     reviewCollection.insertOne(review)
-    .then(console.log(`Inserted Review Successfully`))
+      .then(console.log(`Inserted Review Successfully`))
   })
 
 
@@ -69,6 +71,36 @@ client.connect(err => {
 
   app.get('/getReview', (req, res) => {
     reviewCollection.find({})
+      .toArray((err, collections) => {
+        res.send(collections)
+      })
+  })
+
+
+
+  //to show all orders to admin
+  app.get('/allOrders', (req, res) => {
+    bookCollection.find({})
+      .toArray((err, collections) => {
+        res.send(collections)
+      })
+  })
+
+
+
+  //to post events
+
+  app.post('/addEvent', (req, res) => {
+    const event = req.body;
+    eventCollection.insertOne(event)
+    .then(console.log('event added Successfully'))
+  })
+
+
+
+  //all events to show it on home page
+  app.get('/allEvents', (req, res)=>{
+    eventCollection.find({})
     .toArray((err, collections)=>{
       res.send(collections)
     })
