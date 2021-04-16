@@ -42,6 +42,7 @@ client.connect(err => {
     .then(console.log(`successfully Inserted An Item`))
   })
 
+  
 
   //get user book databaseName
   app.get('/getBookingList/:email',(req, res)=>{
@@ -59,7 +60,7 @@ client.connect(err => {
   app.post('/addReview', (req, res) => {
     const review = req.body
     reviewCollection.insertOne(review)
-    .then('inserted Review Successfully')
+    .then(console.log(`Inserted Review Successfully`))
   })
 
 
