@@ -42,7 +42,7 @@ client.connect(err => {
     .then(console.log(`successfully Inserted An Item`))
   })
 
-  
+
 
   //get user book databaseName
   app.get('/getBookingList/:email',(req, res)=>{
@@ -61,6 +61,17 @@ client.connect(err => {
     const review = req.body
     reviewCollection.insertOne(review)
     .then(console.log(`Inserted Review Successfully`))
+  })
+
+
+
+  //to get review and show it on home page
+
+  app.get('/getReview', (req, res) => {
+    reviewCollection.find({})
+    .toArray((err, collections)=>{
+      res.send(collections)
+    })
   })
 
 
