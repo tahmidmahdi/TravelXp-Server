@@ -3,7 +3,7 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 require('dotenv').config();
 const MongoClient = require('mongodb').MongoClient;
-const e = require('express');
+const express = require('express');
 
 const objectId= require('mongodb').ObjectId;
 const { ObjectId } = require('bson');
@@ -149,10 +149,7 @@ client.connect(err => {
 
 
 
-app.get('/', (req, res) => {
-  res.send('Hello Server is running')
-})
 
 
 
-app.listen(port || process.env.PORT)
+app.listen(process.env.PORT || port)
