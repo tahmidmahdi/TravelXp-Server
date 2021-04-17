@@ -3,6 +3,10 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 require('dotenv').config();
 const MongoClient = require('mongodb').MongoClient;
+const e = require('express');
+
+const objectId= require('mongodb').ObjectId;
+const { ObjectId } = require('bson');
 
 
 const app = express();
@@ -31,6 +35,8 @@ client.connect(err => {
   const bookCollection = client.db("travelXP").collection("book");
   const reviewCollection = client.db("travelXP").collection("review");
   const eventCollection = client.db("travelXP").collection("event");
+  const adminCollection = client.db("travelXP").collection("admin");
+  const loggedInUserCollection = client.db("travelXP").collection("loggedInUser");
 
   console.log('db connection successful');
 
@@ -80,10 +86,13 @@ client.connect(err => {
 
   //to show all orders to admin
   app.get('/allOrders', (req, res) => {
-    bookCollection.find({})
-      .toArray((err, collections) => {
-        res.send(collections)
-      })
+    
+      bookCollection.find({})
+        .toArray((err, collections) => {
+          res.send(collections)
+        })
+    
+
   })
 
 
@@ -93,19 +102,48 @@ client.connect(err => {
   app.post('/addEvent', (req, res) => {
     const event = req.body;
     eventCollection.insertOne(event)
-    .then(console.log('event added Successfully'))
+      .then(console.log('event added Successfully'))
   })
 
 
 
   //all events to show it on home page
-  app.get('/allEvents', (req, res)=>{
+  app.get('/allEvents', (req, res) => {
     eventCollection.find({})
-    .toArray((err, collections)=>{
-      res.send(collections)
-    })
+      .toArray((err, collections) => {
+        res.send(collections)
+      })
   })
 
+
+
+  // to receive admin email
+  app.post('/adminEmail', (req, res) => {
+    const adminEmail = req.body
+    adminCollection.insertOne(adminEmail)
+      .then(console.log('Admin Email Added Successfully'))
+  })
+
+
+
+  //to save user loggedin
+
+  app.post('/loggedIn', (req, res) => {
+    const loggedInData = req.body;
+    console.log(loggedInData);
+    loggedInUserCollection.insertOne(loggedInData)
+      .then(console.log('saved loggedinUser'))
+
+   
+  })
+
+
+
+  app.post('/delete', (req, res)=>{
+    console.log(req.body);
+    eventCollection.deleteOne({_id : ObjectId(req.body.id)})
+    .then(console.log('deleted Successfully'))
+  })
 
 });
 
