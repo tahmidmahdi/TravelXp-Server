@@ -128,12 +128,12 @@ client.connect(err => {
 
   //to save user loggedin
 
-  app.post('/loggedIn', (req, res) => {
-    const loggedInData = req.body;
-    console.log(loggedInData);
-    loggedInUserCollection.insertOne(loggedInData)
-      .then(console.log('saved loggedinUser'))
-
+  app.get('/isAdmin', (req, res) => {
+    adminCollection.find({})
+    .toArray((err, collections)=>{
+      res.send(collections)
+    })
+    
    
   })
 
