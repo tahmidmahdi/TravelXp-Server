@@ -133,7 +133,7 @@ client.connect(err => {
     .toArray((err, collections)=>{
       res.send(collections)
     })
-    
+
    
   })
 
@@ -143,6 +143,13 @@ client.connect(err => {
     console.log(req.body);
     eventCollection.deleteOne({_id : ObjectId(req.body.id)})
     .then(console.log('deleted Successfully'))
+  })
+
+
+  app.post('/statusUpdate', (req, res) => {
+    console.log(req.body.id);
+    const updateId =req.body.id
+    bookCollection.updateOne({_id : ObjectId(updateId)} ,{$set: {status : req.body.status}})
   })
 
 });
